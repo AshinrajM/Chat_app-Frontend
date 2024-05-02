@@ -6,6 +6,7 @@ export default function Navigate() {
         <div className='flex'>
             <Link to="/register">register</Link>
             <Link to="/login">login</Link>
+            <Link to="/chat">Chat</Link>
         </div>
     )
 }

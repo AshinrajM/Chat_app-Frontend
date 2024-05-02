@@ -9,20 +9,21 @@ import MessageInput from './Components/MessageInput';
 
 function App() {
   return (
-    <>
-      <div className='chat-container'>
-        <Sidebar />
-        <ChatArea />
-      </div>
-      <MessageInput />
-    </>
-    // <BrowserRouter>
-    //   <Navigate />
-    //   <Routes>
-    //     <Route path='/login' element={<Login />}></Route>
-    //     <Route path='/register' element={<Register />}></Route>
-    //   </Routes>
-    // </BrowserRouter>
+    // <>
+    //   <div className='chat-container'>
+    //     <Sidebar />
+    //     <ChatArea />
+    //   </div>
+    //   <MessageInput />
+    // </>
+    <BrowserRouter>
+      <Navigate />
+      <Routes>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/register' element={<Register />}></Route>
+        <Route path='/chat' element={<><Sidebar /><ChatArea /></>}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
