@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [form, setForm] = useState({
@@ -9,31 +10,33 @@ function Login() {
 
     })
 
+    const navigate = useNavigate()
+
     const BASE_URL = 'http://127.0.0.1:8000'
 
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form)
+            });
 
-        fetch(`${BASE_URL}/login/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+            const data = await response.json();
+            console.log(data, "response data");
 
-            },
-            body: JSON.stringify(form)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data, "response data")
+            const token = data.token;
+            localStorage.setItem('token', token);
+            navigate('/chat');
+        } catch (error) {
+            console.log(error, "found error");
+        }
 
-            })
-            .catch(error => {
-                console.log(error, "found error")
-
-            })
-
-        console.log(form.email, form.password)
-    }
+        console.log(form.email, form.password);
+    };
 
     return (
         <div>

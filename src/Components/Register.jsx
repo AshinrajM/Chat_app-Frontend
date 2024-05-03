@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
 
@@ -11,28 +12,29 @@ export default function Register() {
         'password': ''
     })
 
+    const navigate = useNavigate()
+
     const BASE_URL = 'http://127.0.0.1:8000'
 
-    const handleFormSubmit = () => {
-        fetch(`${BASE_URL}/register/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+    const handleFormSubmit = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/register/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form),
+            });
 
-            },
-            body: JSON.stringify(form)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data, "response data")
+            const data = await response.json();
+            console.log(data, "response data");
+            navigate('/')
 
-            })
-            .catch(error => {
-                console.log(error, "found error")
-
-            })
+            // Clear the form fields after receiving a successful response
+        } catch (error) {
+            console.log(error, "found error");
+        }
     }
-    // console.log(message, "error")
 
 
     return (

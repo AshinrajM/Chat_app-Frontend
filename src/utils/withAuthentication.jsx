@@ -1,22 +1,39 @@
 import { useEffect, useState } from "react"
 import { Navigate } from "react-router-dom"
 
-const withAuthentication = (wrappedComponent) => {
+const withAuthentication = (WrappedComponent) => {
     return function AuthComponent(props) {
-        const [isAuthenticated, setIsAuthenticated] =
-            useState(false)
+        const [isAuthenticated, setIsAuthenticated] = useState(false)
+        
         useEffect(() => {
-            const token = document.cookie.split('; ').find(row => row.startsWith('token='))
-            if (token) {
-                setIsAuthenticated(true)
-            } else {
-                setIsAuthenticated(false)
-            }
+            const token = localStorage.getItem('token');
+            setIsAuthenticated(!!token);
         }, [])
+        useEffect(() => {
+            const token = localStorage.getItem('token');
+            const handleStorageChange = () => {
+                if (token) {
+                    setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            };
+            window.addEventListener('storage', handleStorageChange);
+            handleStorageChange(); // Check initial token state
+
+            return () => {
+                window.removeEventListener('storage', handleStorageChange);
+            };
+        }, [])
+
+        console.log(isAuthenticated, "state check")
+
         if (isAuthenticated) {
-            return <wrappedComponent {...props} />
+            console.log("returning component")
+            return <WrappedComponent {...props} />
         } else {
-            return <Navigate to='/login' />
+            console.log("returning login")
+            return <Navigate to='/' />
         }
     }
 
